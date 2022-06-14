@@ -71,7 +71,8 @@ const crearIngresoHTML = (ingreso) => {
         <div class="elemento_valor">${formatoMoneda(ingreso.valor)}</div>
         <div class="elemento_eliminar">
             <button class='elemento_eliminar--btn'>
-                <ion-icon name="close-circle-outline"></ion-icon>
+                <ion-icon name="close-circle-outline"
+                onclick="eliminarIngreso(${ingreso.id})"></ion-icon>
             </button>
         </div>
     </div>
@@ -79,6 +80,13 @@ const crearIngresoHTML = (ingreso) => {
     `
     return ingresosHtml;
 };
+
+const eliminarIngreso = (id) => {
+    let indiceEliminar = ingresos.findIndex(ingreso => ingreso.id === id);
+    ingresos.splice(indiceEliminar, 1);
+    cargarCabecero();
+    cargarIngresos();
+}
 
 
 const cargarEgresos = () => {
@@ -98,7 +106,8 @@ const crearEgresoHTML = (egreso) => {
       <div class="elemento_porcentaje">${formatoPorcentaje(egreso.valor)}</div>
       <div class="elemento_eliminar">
         <button class="elemento_eliminar--btn">
-          <ion-icon name="close-circle-outline"></ion-icon>
+          <ion-icon name="close-circle-outline" 
+          onclick="eliminarEgreso(${egreso.id})")"></ion-icon>
         </button>
       </div>
     </div>
@@ -106,3 +115,29 @@ const crearEgresoHTML = (egreso) => {
     `
     return egresosHTML;
 }
+
+const eliminarEgreso = (id) => {
+    let indiceEliminar = egresos.findIndex(egreso => egreso.id === id);
+    egresos.splice(indiceEliminar, 1);
+    cargarCabecero();
+    cargarEgresos();
+}
+
+let agregarDato = () => {
+    let forma = document.forms["forma"];
+    let tipo = forma["tipo"];
+    let descripcion = forma["descripcion"];
+    let valor = forma["valor"];
+    if(descripcion.value !== '' && valor.value !== ''){
+        if(tipo.value === "ingreso"){
+            ingresos.push(new Ingreso(descripcion.value,+valor.value));
+            cargarCabecero();
+            cargarIngresos();
+        }else if(tipo.value === "egreso"){
+            egresos.push(new Egreso(descripcion.value,+valor.value));
+            cargarCabecero();
+            cargarEgresos();
+        }
+    }
+}
+
